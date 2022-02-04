@@ -61,21 +61,21 @@ def preprocess_data(img, mask, num_class=2, backbone=''):
     if backbone == '':
         img = scaler.fit_transform(img.reshape(-1, img.shape[-1])).reshape(img.shape)
         mask = to_categorical(mask, num_class)
-        mask = mask.reshape((mask.shape[0], mask.shape[1], num_class))
+        mask = mask.reshape((mask.shape[0], mask.shape[1], mask.shape[2], num_class))
     else:
         BACKBONE = backbone
         preprocess_input = sm.get_preprocessing(BACKBONE)
         img = scaler.fit_transform(img.reshape(-1, img.shape[-1])).reshape(img.shape)
         img = preprocess_input(img)
         mask = to_categorical(mask, num_class)
-        mask = mask.reshape((mask.shape[0], mask.shape[1], num_class))
+        mask = mask.reshape((mask.shape[0], mask.shape[1],mask.shape[2], num_class))
     return (img, mask)
 
 
-def my_image_mask_generator(image_generator, mask_generator, num_classes=2):
+def my_image_mask_generator(image_generator, mask_generator, num_classes=2,backbone=''):
     train_generator = zip(image_generator, mask_generator)
     for (img, mask) in train_generator:
-        img, mask = preprocess_data(img, mask, num_class=num_classes)
+        img, mask = preprocess_data(img, mask, num_class=num_classes,backbone=backbone)
         yield (img, mask)
 
 
@@ -97,7 +97,7 @@ def make_generator_flow(imgs, masks, batch_size=2, seed=42, augment_dict_i={}, a
     return my_generator
 
 
-def make_generator_flow_dir(train_img_path, train_mask_path, num_class, augment_dict_i={}, augment_dict_m={},target_size=(),batch_size=2,seed=42):
+def make_generator_flow_dir(train_img_path, train_mask_path, num_class=2, augment_dict_i={}, augment_dict_m={},target_size=(),batch_size=2,seed=42,backbone=''):
     if augment_dict_i == {}:
         img_gen = ImageDataGenerator()
         mask_gen = ImageDataGenerator()
@@ -122,7 +122,7 @@ def make_generator_flow_dir(train_img_path, train_mask_path, num_class, augment_
         batch_size=batch_size,
         seed=seed)
 
-    my_generator = my_image_mask_generator(image_generator,mask_generator)
+    my_generator = my_image_mask_generator(image_generator,mask_generator,backbone=backbone,num_classes=num_class)
 
     return my_generator
 
