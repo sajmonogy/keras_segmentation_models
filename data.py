@@ -13,7 +13,7 @@ def read_images(path):
     x = cv2.imread(path, cv2.IMREAD_COLOR)
     x = x / 255.0
     x = x.astype(np.float32)
-    x = normalize(x, axis=1)
+    x = normalize(x,axis=1)
     return x
 
 
@@ -79,7 +79,7 @@ def my_image_mask_generator(image_generator, mask_generator, num_classes=2,backb
         yield (img, mask)
 
 
-def make_generator_flow(imgs, masks, batch_size=2, seed=42, augment_dict_i={}, augment_dict_m={}):
+def make_generator_flow(imgs, masks, batch_size=2, seed=42, augment_dict_i={}, augment_dict_m={},backbone=''):
     if augment_dict_i == {}:
         img_gen = ImageDataGenerator()
         mask_gen = ImageDataGenerator()
@@ -92,7 +92,7 @@ def make_generator_flow(imgs, masks, batch_size=2, seed=42, augment_dict_i={}, a
     img_gener = img_gen.flow(imgs, batch_size=batch_size, seed=seed, shuffle=False)
     mask_gen = mask_gen.flow(masks, batch_size=batch_size, seed=seed, shuffle=False)
 
-    my_generator = my_image_mask_generator(img_gener, mask_gen)
+    my_generator = my_image_mask_generator(img_gener, mask_gen,backbone=backbone)
 
     return my_generator
 
