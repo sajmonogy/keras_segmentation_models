@@ -1,4 +1,3 @@
 # Keras Segmentation Models
 
-UNET (different configurations) - Simple UNET, DeepUNET, DeepResUNET
-DeepLabV3+ with backbones
+UNET (different configurations) - Simple UNET, DeepUNET, DeepLabV3+ with backbones
