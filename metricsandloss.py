@@ -45,6 +45,17 @@ def jacard_coef(y_true, y_pred, smooth=1): # TP/(FN+FP+TP)
 def jacard_coef_loss(y_true, y_pred):
     return -jacard_coef(y_true, y_pred)
 
+
+def iou_class(y_true,y_pred,n_classes):
+    EPS = 1e-12
+    class_wise = K.zeros(n_classes)
+    for cl in range(n_classes):
+        intersection = K.sum((gt == cl)*(pr == cl))
+        union = K.sum(K.maximum((gt == cl), (pr == cl)))
+        iou = float(intersection)/(union + EPS)
+        class_wise[cl] = iou
+    return class_wise
+
 # OTHER METRICS
 
 def precision(y_true, y_pred, smooth=1): # TP/(TP+FP)

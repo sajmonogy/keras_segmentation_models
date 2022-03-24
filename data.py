@@ -63,8 +63,7 @@ def preprocess_data(img, mask, num_class=2, backbone=''):
         mask = to_categorical(mask, num_class)
         mask = mask.reshape((mask.shape[0], mask.shape[1], mask.shape[2], num_class))
     else:
-        BACKBONE = backbone
-        preprocess_input = sm.get_preprocessing(BACKBONE)
+        preprocess_input = sm.get_preprocessing(backbone)
         img = scaler.fit_transform(img.reshape(-1, img.shape[-1])).reshape(img.shape)
         img = preprocess_input(img)
         mask = to_categorical(mask, num_class)
@@ -97,7 +96,7 @@ def make_generator_flow(imgs, masks, batch_size=2, seed=42, augment_dict_i={}, a
     return my_generator
 
 
-def make_generator_flow_dir(train_img_path, train_mask_path, num_class=2, augment_dict_i={}, augment_dict_m={},target_size=(),batch_size=2,seed=42,backbone=''):
+def make_generator_flow_dir(train_img_path, train_mask_path, num_class=2, augment_dict_i={}, augment_dict_m={},target_size=(),batch_size=2,seed=42,backbone=''): # target size have to be declared
     if augment_dict_i == {}:
         img_gen = ImageDataGenerator()
         mask_gen = ImageDataGenerator()
@@ -131,7 +130,7 @@ def plot_gen(gen, batch_size=2):
     x, y = gen.__next__()
     for i in range(0, batch_size):
         image = x[i]
-        mask = np.argmax(y[i],axis=2)
+        mask = np.argmax(y[i],axis=2) # have to be after one hot encoding
         plt.subplot(1, 2, 1)
         plt.imshow(image)
         plt.subplot(1, 2, 2)

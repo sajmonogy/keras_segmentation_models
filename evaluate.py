@@ -38,9 +38,9 @@ def make_img_to_pap(path_models,path_gen,save_dir='',custom={}):
     models = load_models_ev(path_models,custom=custom)
     test_img,test_masks = read_train_flow(path_gen)
     test_gen = make_generator_flow(val_img,val_masks,batch_size=1)
-    fig = plt.figure(figsize=(20, 20))
     columns = 2+len(models)
     rows = len(os.listdir(path_gen+'/images'))
+    fig = plt.figure(figsize=(rows*6, columns*6))
     l = 1
     for i in range(rows):
         img,msk = test_gen.__next__()
@@ -63,9 +63,13 @@ def make_img_to_pap(path_models,path_gen,save_dir='',custom={}):
             fig.add_subplot(rows,columns,l+2+j)
             plt.axis(False)
             plt.imshow(pred_img[j],cmap='RdYlGn')
-        l = l+8
+        l = l+columns
         fig.tight_layout()
 
-    plt.subplots_adjust(top=0.7)
-    plt.savefig(save_dir,dpi=500)
+    plt.subplots_adjust(wspace=0.1,hspace=0.1)
+    plt.savefig(save_dir,dpi=1000)
     plt.show()
+
+
+
+    
