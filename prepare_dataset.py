@@ -170,7 +170,7 @@ def path_to_files(nazwa_data):
     return vec_dxf,dsm_path,ortho_path
 
 
-def patch(img_dir,mask_dir,img_channels_count,patch_size,img_save_dir,mask_save_dir):
+def patch(img_dir,mask_dir,img_channels_count,patch_size,img_save_dir,mask_save_dir): # merge into one with check_useful
     
     for path, subdirs, files in os.walk(img_dir): 
     dirname = path.split(os.path.sep)[-1]

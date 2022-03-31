@@ -28,7 +28,7 @@ def simple_unet_decoder_block(inp, conc, param, activation='relu'):
     return dec
 
 
-def simple_unet(inp_shape, param=[], dropout=False, dropout_rate=0, num_class=2, last_activation='sigmoid'):
+def simple_unet(inp_shape, param=[], dropout=False, dropout_rate=0, num_class=2, last_activation='sigmoid'): # parameters have to be defined
     inp = Input(shape=inp_shape)
     encoder_blocks = []
     for i in range(len(param)):
@@ -49,7 +49,6 @@ def simple_unet(inp_shape, param=[], dropout=False, dropout_rate=0, num_class=2,
         if i == 0:
             pass
         else:
-            print(i)
             if i == len(param) - 1:
                 dec = simple_unet_decoder_block(enc, encoder_blocks[i - 1], param[i - 1])
             else:

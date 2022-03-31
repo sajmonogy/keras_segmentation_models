@@ -1,0 +1,10 @@
+UnetPlusPlus - NesNet
+Dodanie Backbonów
+https://github.com/MrGiovanni/UNetPlusPlus - dużo zaimplementowanych architektur
+https://github.com/yingkaisha/keras-unet-collection - różne wariacje UNET
+
+
+SegNet
+FCN
+
+

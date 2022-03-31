@@ -1,4 +1,5 @@
 import tensorflow.keras.backend as K
+from tensorflow.keras.losses import binary_crossentropy
 
 
 # Tversky loss
@@ -33,6 +34,11 @@ def dice_coef(y_true, y_pred, smooth=1):
 def dice_coef_loss(y_true, y_pred):
     return 1 - dice_coef(y_true, y_pred)
 
+def bce_dice_loss(y_true, y_pred):
+    bce_loss = binary_crossentropy(y_true, y_pred)
+    return bce_loss+dice_coef_loss(y_true,y_pred)
+
+
 # Jaccard index - IoU
 
 
@@ -56,6 +62,11 @@ def iou_class(y_true,y_pred,n_classes):
         class_wise[cl] = iou
     return class_wise
 
+def bce_jaccard_loss(y_true, y_pred):
+    bce_loss = binary_crossentropy(y_true, y_pred)
+    return bce_loss+jaccard_coef_loss(y_true,y_pred)
+
+
 # OTHER METRICS
 
 def precision(y_true, y_pred, smooth=1): # TP/(TP+FP)
@@ -73,7 +84,9 @@ def recall(y_true, y_pred,smooth=1):
     return (true_pos+smooth)/(true_pos+false_neg+smooth)
 
 
-    
+# TO DO:
+## focal loss
+
 
 
 

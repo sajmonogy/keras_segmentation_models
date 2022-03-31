@@ -1,3 +1,7 @@
+# based on https://arxiv.org/pdf/1709.00201.pdf
+
+
+
 from tensorflow.keras.layers import Input,Conv2D,Concatenate, BatchNormalization, Activation, Conv2DTranspose, MaxPooling2D,Dropout,UpSampling2D, Add, AveragePooling2D
 from tensorflow.keras.models import Model
 
