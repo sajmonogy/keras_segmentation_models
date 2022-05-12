@@ -7,7 +7,6 @@ UNET (different configurations) - Simple UNET, DeepUNET, DeepLabV3+ with backbon
 # Part 1
 
 ## Building Segmentation Dataset
-### 0.5m dataset
--> link
-### 0.1m dataset
--> link
+
+### Open Spatial Data - Building part1 (OSD-B1)
+[OSD-B1 Dataset](https://drive.google.com/file/d/1FiS4Q_m-icFixBrI73honsF7_cAgvuIq/view?usp=sharing)
