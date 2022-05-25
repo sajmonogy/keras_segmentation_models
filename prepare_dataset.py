@@ -173,46 +173,46 @@ def path_to_files(nazwa_data):
 def patch(img_dir,mask_dir,img_channels_count,patch_size,img_save_dir,mask_save_dir): # merge into one with check_useful
     
     for path, subdirs, files in os.walk(img_dir): 
-    dirname = path.split(os.path.sep)[-1]
-    images = os.listdir(path)  
-    for i, image_name in enumerate(images):  
-        if image_name.endswith(".tif"):
-            image = tifffile.imread(path+"/"+image_name)
-            SIZE_X = ((image.shape[1])//patch_size)*patch_size
-            SIZE_Y = ((image.shape[0])//patch_size)*patch_size
-            image = image[:SIZE_Y,:SIZE_X,:]
+        dirname = path.split(os.path.sep)[-1]
+        images = os.listdir(path)  
+        for i, image_name in enumerate(images):  
+            if image_name.endswith(".tif"):
+                image = tifffile.imread(path+"/"+image_name)
+                SIZE_X = ((image.shape[1])//patch_size)*patch_size
+                SIZE_Y = ((image.shape[0])//patch_size)*patch_size
+                image = image[:SIZE_Y,:SIZE_X,:]
 
-            patches_img = patchify(image, (patch_size, patch_size, img_channels_count), step=patch_size)
+                patches_img = patchify(image, (patch_size, patch_size, img_channels_count), step=patch_size)
 
-            for i in range(patches_img.shape[0]):
-                for j in range(patches_img.shape[1]):
-                    
-                    single_patch_img = patches_img[i,j,:,:]
-                    single_patch_img = single_patch_img[0]                           
-                    
-                    tifffile.imwrite(img_save_dir+image_name+"patch_"+str(i)+str(j)+".tif", single_patch_img)
+                for i in range(patches_img.shape[0]):
+                    for j in range(patches_img.shape[1]):
+                        
+                        single_patch_img = patches_img[i,j,:,:]
+                        single_patch_img = single_patch_img[0]                           
+                        
+                        tifffile.imwrite(img_save_dir+image_name+"patch_"+str(i)+str(j)+".tif", single_patch_img)
 
     
-    for path, subdirs, files in os.walk(masks_dir): 
-    dirname = path.split(os.path.sep)[-1]
-    masks = os.listdir(path)  
-    for i, mask_name in enumerate(masks):  
-        if mask_name.endswith(".tif"):
-            mask = tifffile.imread(path+"/"+mask_name)
-            mask = np.reshape(mask,[mask.shape[0],mask.shape[1],1])
-            SIZE_X = ((mask.shape[1])//patch_size)*patch_size
-            SIZE_Y = ((mask.shape[0])//patch_size)*patch_size
-            mask = mask[:SIZE_Y,:SIZE_X,:]
+    for path, subdirs, files in os.walk(mask_dir): 
+        dirname = path.split(os.path.sep)[-1]
+        masks = os.listdir(path)  
+        for i, mask_name in enumerate(masks):  
+            if mask_name.endswith(".tif"):
+                mask = tifffile.imread(path+"/"+mask_name)
+                mask = np.reshape(mask,[mask.shape[0],mask.shape[1],1])
+                SIZE_X = ((mask.shape[1])//patch_size)*patch_size
+                SIZE_Y = ((mask.shape[0])//patch_size)*patch_size
+                mask = mask[:SIZE_Y,:SIZE_X,:]
 
-            patches_msk = patchify(mask, (patch_size, patch_size, 1), step=patch_size)
+                patches_msk = patchify(mask, (patch_size, patch_size, 1), step=patch_size)
 
-            for i in range(patches_msk.shape[0]):
-                for j in range(patches_msk.shape[1]):
-                    
-                    single_patch_msk = patches_msk[i,j,:,:]
-                    single_patch_msk = single_patch_msk[0]                           
-                    
-                    tifffile.imwrite(mask_save_dir+mask_name+"patch_"+str(i)+str(j)+".tif", single_patch_msk)
+                for i in range(patches_msk.shape[0]):
+                    for j in range(patches_msk.shape[1]):
+                        
+                        single_patch_msk = patches_msk[i,j,:,:]
+                        single_patch_msk = single_patch_msk[0]                           
+                        
+                        tifffile.imwrite(mask_save_dir+mask_name+"patch_"+str(i)+str(j)+".tif", single_patch_msk)
 
 def check_useful(img_dir,mask_dir,img_save_dir,mask_save_dir,min_cover=0.05):
     img_list = os.listdir(img_dir)
@@ -222,14 +222,14 @@ def check_useful(img_dir,mask_dir,img_save_dir,mask_save_dir,min_cover=0.05):
         img_name=img_list[img]
         mask_name = msk_list[img]
     
-    temp_image=tifffile.imread(train_img_dir+img_list[img])
-    temp_mask=tifffile.imread(train_mask_dir+msk_list[img])
+        temp_image=tifffile.imread(train_img_dir+img_list[img])
+        temp_mask=tifffile.imread(train_mask_dir+msk_list[img])
 
-    val, counts = np.unique(temp_mask, return_counts=True)
+        val, counts = np.unique(temp_mask, return_counts=True)
 
-    if (1 - (counts[0]/counts.sum())) > 0.05:
-        print("Save Me")
-        tifffile.imwrite(img_save_dir+img_name, temp_image)
-        tifffile.imwrite(mask_save_dir+mask_name, temp_mask)
+        if (1 - (counts[0]/counts.sum())) > min_cover:
+            print("Save Me")
+            tifffile.imwrite(img_save_dir+img_name, temp_image)
+            tifffile.imwrite(mask_save_dir+mask_name, temp_mask)
 
 
